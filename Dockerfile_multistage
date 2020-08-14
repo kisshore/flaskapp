@@ -1,0 +1,17 @@
+FROM python as builder
+RUN apt-get update && apt-get  install vim -y
+RUN pip install Flask requests
+RUN mkdir /app
+RUN chown 1001 /app
+USER 1001
+RUN cd /app; git clone https://github.com/kisshore/flaskapp.git
+WORKDIR /app/flaskapp
+
+FROM python
+RUN pip install Flask requests
+USER 1001
+COPY --from=builder /app/flaskapp/app.py /app/flaskapp/app.py
+WORKDIR /app/flaskapp
+ENV FLASK_APP=app.py FLASK_ENV=development
+EXPOSE 5000
+CMD ["python","-m","flask","run","--host=0.0.0.0"]
