@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app1 
+  labels:
+    proj: app1 
+spec:
+  containers:
+  - name: app1cont 
+    image: ifccncf/arg-output
+    command: ["--verify -p 88"]
+#    args: ["HOSTNAME", "KUBERNETES_PORT"]
