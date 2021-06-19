@@ -1,0 +1,40 @@
+# cat  /opt/fluentd-configmap.yml
+# kubectl create -f  /opt/fluentd-configmap.yml
+# configmap/cm-data created
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: two-containers
+spec:
+
+  restartPolicy: Never
+
+  volumes:
+  - name: shared-data
+    emptyDir: {}
+  - name: configmap-data
+    configMap:
+      name: cm-data
+    
+  containers:
+
+  - name: logger-123
+    image:  ifccncf/busybox:1
+    volumeMounts:
+    - name: shared-data
+      mountPath:  /tmp/log
+    command: ["sh", "-c"]
+    args:
+    - while true; do
+        echo "hi" > /tmp/log;
+      done;  
+
+  - name: adapto-dev
+    image: ifccncf/fluentd:v0.12
+    volumeMounts:
+    - name: shared-data
+      mountPath:  /tmp/log
+    - name: configmap-data
+      mountPath:  /fluentd/etc
+      
