@@ -1,6 +1,12 @@
 # cat  /opt/fluentd-configmap.yml
 # kubectl create -f  /opt/fluentd-configmap.yml
+######or#######
+# kubectl create configmap cm-data --from-file=/opt/fluentd-configmap.yml
+
 # configmap/cm-data created
+
+
+
 
 apiVersion: v1
 kind: Pod
@@ -27,7 +33,7 @@ spec:
     command: ["sh", "-c"]
     args:
     - while true; do
-        echo "hi" > /tmp/log;
+        echo "hi" > /tmp/log/input.log;
       done;  
 
   - name: adapto-dev
